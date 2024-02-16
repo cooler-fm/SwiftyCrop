@@ -69,6 +69,7 @@ struct ContentView: View {
                     imageToCrop: selectedImage,
                     maskShape: selectedShape,
                     configuration: SwiftyCropConfiguration(
+												maskRadius: 164, // JL, for cooler
                         cropImageCircular: cropImageCircular
                     )
                 ) { croppedImage in

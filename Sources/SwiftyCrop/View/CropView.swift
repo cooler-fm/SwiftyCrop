@@ -1,5 +1,7 @@
 import SwiftUI
 
+let maskRectangleCornerRadius = 82.0
+
 struct CropView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: CropViewModel
@@ -32,9 +34,16 @@ struct CropView: View {
     var body: some View {
         VStack {
             Text("interaction_instructions", tableName: localizableTableName, bundle: .module)
-                .font(.system(size: 16, weight: .regular))
-                .foregroundColor(.white)
-                .padding(.top, 30)
+                // JL, for cooler
+								//.font(.system(size: 16, weight: .regular))
+                //.foregroundColor(.white)
+								.font(
+									Font.custom("SF Pro", size: 17)
+										.weight(.bold)
+								)
+								.foregroundColor(Color(red: 0.92, green: 0.91, blue: 0.83))
+								// JL, for cooler
+		            .padding(.top, 30)
                 .zIndex(1)
 
             ZStack {
@@ -62,8 +71,12 @@ struct CropView: View {
                         MaskShapeView(maskShape: maskShape)
                             .frame(width: viewModel.maskRadius * 2, height: viewModel.maskRadius * 2)
                     )
+										.overlay(content: {
+											MaskShapeOverlayView(maskShape: maskShape)
+												.frame(width: viewModel.maskRadius * 2, height: viewModel.maskRadius * 2)
+										})
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+						.frame(maxWidth: .infinity, maxHeight: .infinity)
             .gesture(
                 MagnificationGesture()
                     .onChanged { value in
@@ -108,7 +121,11 @@ struct CropView: View {
                 } label: {
                     Text("cancel_button", tableName: localizableTableName, bundle: .module)
                 }
-                .foregroundColor(.white)
+								// JL, for cooler
+                //.foregroundColor(.white)
+								.font(Font.custom("SF Pro", size: 17))
+								.foregroundColor(Color(red: 0.92, green: 0.91, blue: 0.83))
+								// JL, for cooler
 
                 Spacer()
 
@@ -118,7 +135,14 @@ struct CropView: View {
                 } label: {
                     Text("save_button", tableName: localizableTableName, bundle: .module)
                 }
-                .foregroundColor(.white)
+								// JL, for cooler
+                //.foregroundColor(.white)
+								.font(
+									Font.custom("SF Pro", size: 17)
+										.weight(.semibold)
+								)
+								.foregroundColor(Color(red: 0.92, green: 0.91, blue: 0.83))
+								// JL, for cooler
             }
             .frame(maxWidth: .infinity, alignment: .bottom)
             .padding()
@@ -145,8 +169,30 @@ struct CropView: View {
 
                 case .square:
                     Rectangle()
+											.cornerRadius(maskRectangleCornerRadius) // JL, for cooler
                 }
             }
         }
     }
+	
+		// JL, for cooler
+		private struct MaskShapeOverlayView: View {
+			let maskShape: MaskShape
+			
+			var body: some View {
+				Group {
+					switch maskShape {
+						case .circle:
+							Circle()
+								.opacity(0)
+							
+						case .square:
+							RoundedRectangle(cornerRadius: maskRectangleCornerRadius)
+								.inset(by: -1.5)
+								.stroke(.white, lineWidth: 3)
+					}
+				}
+			}
+		}
+		// JL, for cooler
 }
